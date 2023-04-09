@@ -1,0 +1,42 @@
+%option noyywrap
+letter[A-Za-z]
+digit[0-9]
+operator[+-*/]
+%{
+	#include<stdio.h>
+%}
+
+%%
+void |
+main |
+if |
+do |
+float |
+int |
+printf |
+char |
+for |
+while {printf("%s is a keyword\n",yytext);}
+%s |
+%d |
+%c |
+%f {printf("%s is a data type\n",yytext);}
+{digit}({digit})* {printf("%s is a number\n", yytext);}
+{letter}({letter}|{digit})* {printf("%s is a identifier\n", yytext);}
+\( {printf("%s is the open parenthesis\n", yytext);}
+\) {printf("%s is the close parenthesis\n", yytext);}
+\{ {printf("%s is the open bracket\n", yytext);}
+\} {printf("%s is the close bracket\n", yytext);}
+\= |  \+ | \- | \* | \/ {printf("%s is  a, operator\n", yytext);}
+\; {printf("%s is  a semicolon\n", yytext);}
+%%
+int main(int argc, char* argv[])
+{
+	FILE *fp;
+	if((fp=fopen(argv[1], "r"))==NULL){
+		printf("FILE DOESN'T EXIST");
+	}
+	yyin = fp;
+	yylex();
+	return 0;
+}
